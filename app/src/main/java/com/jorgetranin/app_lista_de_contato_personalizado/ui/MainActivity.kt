@@ -1,6 +1,8 @@
 package com.jorgetranin.app_lista_de_contato_personalizado.ui
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -10,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.gson.Gson
 import com.jorgetranin.app_lista_de_contato_personalizado.R
 import com.jorgetranin.app_lista_de_contato_personalizado.databinding.ActivityMainBinding
 import com.jorgetranin.app_lista_de_contato_personalizado.model.Contact
@@ -35,7 +38,9 @@ class MainActivity : AppCompatActivity(), OnItemClickListener {
         setupListContato()
     }
 
-
+private fun getInstanceSharedPreferences(): SharedPreferences{
+    return getSharedPreferences("com.jorgetranin.app_lista_de_contato_personalizado.PREFERENCES",Context.MODE_PRIVATE, )
+}
 
     fun setupListContato() {
         val list: MutableList<Contact>
@@ -81,6 +86,11 @@ class MainActivity : AppCompatActivity(), OnItemClickListener {
                 image = ""
             )
         )
+
+        with (getInstanceSharedPreferences().edit()) {
+            putString("contacts", Gson().toJson(list))
+            apply()
+        }
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
         adapter = ContactAdapter(list) { contact ->
             onItemClick(contact)
