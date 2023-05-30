@@ -5,11 +5,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.widget.Toast
-import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.MaterialToolbar
@@ -38,16 +35,10 @@ class MainActivity : AppCompatActivity(), OnItemClickListener {
         setupListContato()
     }
 
-    fun initDrower() {
-        val drawerLayout = findViewById<View>(R.id.drawer) as DrawerLayout
-        val toolbar: MaterialToolbar = findViewById(R.id.topAppBar)
-        val toggle = ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.opendrawe, R.string.fechar)
-        drawerLayout.addDrawerListener(toggle)
-        toggle.syncState()
-    }
+
 
     fun setupListContato() {
-        var list: MutableList<Contact> = mutableListOf()
+        val list: MutableList<Contact>
         list = arrayListOf(
             Contact(
                 name = "jorge",
@@ -91,7 +82,7 @@ class MainActivity : AppCompatActivity(), OnItemClickListener {
             )
         )
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
-        val adapter = ContactAdapter(list) { contact ->
+        adapter = ContactAdapter(list) { contact ->
             onItemClick(contact)
             // Ação a ser realizada quando um item é clicado
             // Use o objeto 'contact' para acessar as informações do item clicado
