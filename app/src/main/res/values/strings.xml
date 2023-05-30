@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">App-Lista-de-Contato-personalizado</string>
+    <string name="more">mais</string>
+    <string name="more2">mais2</string>
+    <string name="more3">mais3</string>
+    <string name="content_description_more">botao de seleção mais</string>
+    <string name="contatos">contatos</string>
 </resources>
