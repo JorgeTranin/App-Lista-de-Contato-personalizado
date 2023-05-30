@@ -5,4 +5,6 @@
     <string name="more3">mais3</string>
     <string name="content_description_more">botao de seleção mais</string>
     <string name="contatos">contatos</string>
+    <string name="opendrawe">abrir</string>
+    <string name="fechar">fechar</string>
 </resources>

@@ -1,22 +1,25 @@
 package com.jorgetranin.app_lista_de_contato_personalizado.ui
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
-import android.view.MenuInflater
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AppCompatActivity
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.MaterialToolbar
 import com.jorgetranin.app_lista_de_contato_personalizado.R
 import com.jorgetranin.app_lista_de_contato_personalizado.databinding.ActivityMainBinding
 import com.jorgetranin.app_lista_de_contato_personalizado.model.Contact
+import com.jorgetranin.app_lista_de_contato_personalizado.ui.ContatoDetalhe.Companion.INDEX_CONTACT
 import com.jorgetranin.app_lista_de_contato_personalizado.ui.adapter.ContactAdapter
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), OnItemClickListener {
     private lateinit var appBarLayout: AppBarLayout
     private lateinit var adapter: ContactAdapter
     lateinit var binding: ActivityMainBinding
@@ -26,16 +29,21 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         // Configuração da barra de aplicativo
+
+       // initDrower()
         val toolbar: MaterialToolbar = findViewById(R.id.topAppBar)
         setSupportActionBar(toolbar)
-
         appBarLayout = findViewById(R.id.menu)
-        setupListContato()
 
+        setupListContato()
     }
 
-    fun mockListFake() {
-
+    fun initDrower() {
+        val drawerLayout = findViewById<View>(R.id.drawer) as DrawerLayout
+        val toolbar: MaterialToolbar = findViewById(R.id.topAppBar)
+        val toggle = ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.opendrawe, R.string.fechar)
+        drawerLayout.addDrawerListener(toggle)
+        toggle.syncState()
     }
 
     fun setupListContato() {
@@ -83,8 +91,13 @@ class MainActivity : AppCompatActivity() {
             )
         )
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
-        adapter = ContactAdapter(list)
+        val adapter = ContactAdapter(list) { contact ->
+            onItemClick(contact)
+            // Ação a ser realizada quando um item é clicado
+            // Use o objeto 'contact' para acessar as informações do item clicado
+        }
         binding.recyclerView.adapter = adapter
+
     }
 
 
@@ -111,4 +124,11 @@ class MainActivity : AppCompatActivity() {
     private fun toast(msg: String){
         Toast.makeText(this@MainActivity,  msg, Toast.LENGTH_LONG).show()
     }
+
+    override fun onItemClick(contact: Contact) {
+        val intent = Intent(this, ContatoDetalhe::class.java)
+        intent.putExtra(INDEX_CONTACT, contact)
+        startActivity(intent)
+    }
+
 }

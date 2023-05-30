@@ -8,7 +8,10 @@ import com.jorgetranin.app_lista_de_contato_personalizado.R
 import com.jorgetranin.app_lista_de_contato_personalizado.databinding.ItemContatoBinding
 import com.jorgetranin.app_lista_de_contato_personalizado.model.Contact
 
-class ContactAdapter(private val list: MutableList<Contact>) : RecyclerView.Adapter<ContactAdapter.ViewHolder>() {
+class ContactAdapter(
+    private val list: MutableList<Contact>,
+    private val onItemClick: (Contact) -> Unit
+) : RecyclerView.Adapter<ContactAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -22,17 +25,20 @@ class ContactAdapter(private val list: MutableList<Contact>) : RecyclerView.Adap
 
     override fun getItemCount(): Int = list.size
 
-    class ViewHolder(val binding: ItemContatoBinding) : RecyclerView.ViewHolder(binding.root){
-
-        fun bind(contact: Contact){
+    inner class ViewHolder(val binding: ItemContatoBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(contact: Contact) {
             binding.tvName.text = contact.name
             binding.tvTelefone.text = contact.telefone
 
-        Glide.with(binding.ivOwner)
-            .load(contact.image)
-            .centerCrop()
-            .placeholder(R.drawable.loading_spinner)
-            .into(binding.ivOwner);
+            Glide.with(binding.ivOwner)
+                .load(contact.image)
+                .centerCrop()
+                .placeholder(R.drawable.loading_spinner)
+                .into(binding.ivOwner)
+
+            binding.root.setOnClickListener {
+                onItemClick.invoke(contact)
+            }
         }
     }
 }
